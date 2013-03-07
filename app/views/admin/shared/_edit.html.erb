@@ -4,3 +4,9 @@
   <%= render :partial => "form" %>
 
 <% end %>
+
+<%= form_tag( { :action => 'merge' } ) do %>
+
+  <%= render :partial => "merge_form" if current_user.admin? %>
+
+<% end %>

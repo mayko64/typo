@@ -41,17 +41,39 @@ Given /^the blog is set up$/ do
                 :profile_id => 1,
                 :name => 'admin',
                 :state => 'active'})
+  User.create!({:login => 'publisher',
+                :password => 'aaaaaaaa',
+                :email => 'joe@sand.com',
+                :profile_id => 2,
+                :name => 'publisher',
+                :state => 'active'})
 end
 
-And /^I am logged into the admin panel$/ do
+And /^I am logged into the admin panel(?: as ([a-z]+))?$/ do |username|
+  username ||= 'admin'
+
   visit '/accounts/login'
-  fill_in 'user_login', :with => 'admin'
+  fill_in 'user_login', :with => username
   fill_in 'user_password', :with => 'aaaaaaaa'
   click_button 'Login'
   if page.respond_to? :should
     page.should have_content('Login successful')
   else
     assert page.has_content?('Login successful')
+  end
+end
+
+Given /^the following articles exist:$/ do |table|
+  table.hashes.each do |a|
+    article = Article.create(a)
+    article.save
+  end
+end
+
+And /^the following comments exist:$/ do |table|
+  table.hashes.each do |c|
+    a = Article.find(c['article_id'])
+    a.add_comment(c)
   end
 end
 

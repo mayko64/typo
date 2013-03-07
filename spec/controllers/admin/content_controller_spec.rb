@@ -514,6 +514,10 @@ describe Admin::ContentController do
         end
       end
 
+      it 'should merge articles by merge action' do
+        pending
+      end
+
       it 'should allow updating body_and_extended' do
         article = @article
         post :edit, 'id' => article.id, 'article' => {
